@@ -10,6 +10,10 @@ This module reconciles translations between local and global files
 
 `node index.js ../DeedMob ../DeedMob/intl/ en,nl`
 
+# Bugs
+
+- [ ] Doesn't recognize function values
+
 # Expectations
 
 - [x] Throw error message if missing language key
