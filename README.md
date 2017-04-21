@@ -10,9 +10,9 @@ This module reconciles translations between local and global files
 
 `node index.js ../DeedMob ../DeedMob/intl/ en,nl`
 
-# Bugs
+# Improvements
 
-- [ ] Doesn't recognize function values
+- [ ] Alphabetical/deterministic order of object props & keys to minimize git diff problems
 
 # Expectations
 
