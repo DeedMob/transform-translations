@@ -17,7 +17,6 @@ finder.on('directory', function (dir, stat, stop) {
 
 finder.on('file', function (file, stat) {
   if(file.includes('translations.js')){
-    console.log('Translation file', file);
     numberOfFiles++;
 
     const languageOriented = {};
@@ -70,7 +69,15 @@ finder.on('end', function () {
       mergedTranslations[language] = mergedTranslation;
 
       // Write global translation
-      fs.writeFileSync(pathToFile, JSON.stringify(mergedTranslation, null, 2), 'utf-8');
+      fs.writeFileSync(
+        pathToFile,
+        JSON.stringify(
+          mergedTranslation,
+          Object.keys(mergedTranslation).sort(),
+          2
+        ),
+        'utf-8'
+      );
     }
     catch(err){
       console.log(err);
@@ -78,7 +85,15 @@ finder.on('end', function () {
       mergedTranslations[language] = localTranslations[language];
 
       // Create new file and write to it.
-      fs.writeFileSync(pathToFile, JSON.stringify(localTranslations[language], null, 2) , 'utf-8');
+      fs.writeFileSync(
+        pathToFile,
+        JSON.stringify(
+          localTranslations[language],
+          Object.keys(localTranslations[language]).sort(),
+          2
+        ),
+        'utf-8'
+      );
     }
   }
 
