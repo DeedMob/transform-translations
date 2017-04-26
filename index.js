@@ -3,6 +3,16 @@ var path = require('path');
 const fs = require('fs');
 const _ = require('lodash');
 
+const replacer = (key, value) =>
+	value instanceof Object ?
+		Object.keys(value)
+		.sort()
+		.reduce((sorted, key) => {
+			sorted[key] = value[key];
+			return sorted
+		}, {}) :
+		value;
+
 var supportedLanguages = process.argv[4].split(',');
 var numberOfFiles = 0;
 var localTranslations = {}; // Map language => (Map fileName => (Map key => translation))
@@ -73,7 +83,7 @@ finder.on('end', function () {
         pathToFile,
         JSON.stringify(
           mergedTranslation,
-          Object.keys(mergedTranslation).sort(),
+          replacer,
           2
         ),
         'utf-8'
@@ -89,7 +99,7 @@ finder.on('end', function () {
         pathToFile,
         JSON.stringify(
           localTranslations[language],
-          Object.keys(localTranslations[language]).sort(),
+          replacer,
           2
         ),
         'utf-8'
@@ -108,6 +118,6 @@ finder.on('end', function () {
       }
     }
     // write to local file
-    fs.writeFileSync(filePath, 'module.exports = ' + JSON.stringify(o, null, 2) , 'utf-8');
+    fs.writeFileSync(filePath, 'module.exports = ' + JSON.stringify(o, replacer, 2) , 'utf-8');
   }
 });
