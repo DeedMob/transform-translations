@@ -81,17 +81,21 @@ finder.on('end', function () {
 				if(sourceOfTruth === "local"){
 					mergedTranslation[filePath] = Object.assign(
 						{},
-						_.pick(globalTranslation[filePath],
-						localTranslation[filePath],
-						Object.keys(localTranslation[filePath])) || {}
+						globalTranslation[filePath],
+						_.pick(
+							localTranslation[filePath],
+							Object.keys(localTranslation[filePath])
+						) || {}
 					);
 				}
 				else if(sourceOfTruth === "global"){
 					mergedTranslation[filePath] = Object.assign(
 	          {},
 						localTranslation[filePath],
-						_.pick(globalTranslation[filePath],
-						Object.keys(localTranslation[filePath])) || {}
+						_.pick(
+							globalTranslation[filePath],
+							Object.keys(localTranslation[filePath])
+						) || {}
 	        );
 				}
       }
