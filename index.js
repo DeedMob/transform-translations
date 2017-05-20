@@ -14,6 +14,12 @@ const replacer = (key, value) =>
 		value;
 
 var supportedLanguages = process.argv[4].split(',');
+var sourceOfTruth = process.argv[5] || "local";
+if(!(sourceOfTruth === "local" || sourceOfTruth === "global")){
+	console.error('Invalid source of truth');
+	return;
+}
+console.log('Source of truth is ' + sourceOfTruth);
 var numberOfFiles = 0;
 var localTranslations = {}; // Map language => (Map fileName => (Map key => translation))
 for(const language of supportedLanguages){
@@ -72,9 +78,22 @@ finder.on('end', function () {
       // Merge the two
       const mergedTranslation = {};
       for(const filePath in localTranslation){
-        mergedTranslation[filePath] = Object.assign(
-          {}, localTranslation[filePath], _.pick(globalTranslation[filePath], Object.keys(localTranslation[filePath])) || {}
-        );
+				if(sourceOfTruth === "local"){
+					mergedTranslation[filePath] = Object.assign(
+						{},
+						_.pick(globalTranslation[filePath],
+						localTranslation[filePath],
+						Object.keys(localTranslation[filePath])) || {}
+					);
+				}
+				else if(sourceOfTruth === "global"){
+					mergedTranslation[filePath] = Object.assign(
+	          {},
+						localTranslation[filePath],
+						_.pick(globalTranslation[filePath],
+						Object.keys(localTranslation[filePath])) || {}
+	        );
+				}
       }
       mergedTranslations[language] = mergedTranslation;
 
